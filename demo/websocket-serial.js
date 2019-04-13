@@ -1,29 +1,28 @@
-function WebSocketPrinter(options) {
+function WebSocketSerial(options) {
     var defaults = {
-        url: "ws://127.0.0.1:12212/printer",
+        url: 'ws://127.0.0.1:12212/serial/DISPLAY',
         onConnect: function () {
         },
         onDisconnect: function () {
         },
-        onUpdate: function () {
-        },
+        onMessage: function (message) {
+        }
     };
 
     var settings = Object.assign({}, defaults, options);
     var websocket;
-    var connected = false;
+    var buffer = '';
 
     var onMessage = function (evt) {
-        settings.onUpdate(evt.data);
+        var chr = evt.data;
+        settings.onMessage(chr);
     };
 
     var onConnect = function () {
-        connected = true;
         settings.onConnect();
     };
 
     var onDisconnect = function () {
-        connected = false;
         settings.onDisconnect();
         reconnect();
     };
@@ -39,18 +38,8 @@ function WebSocketPrinter(options) {
         connect();
     };
 
-    this.submit = function (data) {
-        if (Array.isArray(data)) {
-            data.forEach(function (element) {
-                websocket.send(JSON.stringify(element));
-            });
-        } else {
-            websocket.send(JSON.stringify(data));
-        }
-    };
-
-    this.isConnected = function () {
-        return connected;
+    this.send = function (message) {
+        websocket.send(message);
     };
 
     connect();

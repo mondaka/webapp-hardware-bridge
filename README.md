@@ -5,8 +5,9 @@ WebApp Hardware Bridge (succeeder of "Chrome Hardware Bridge / Chrome Direct Pri
 Make it possible for WebApp to perform silent print and access to serial ports.
 
 Common use cases:
-- Web-based POS - PDF and receipt silent print
-- Web-based WMS - Serial weight scale real-time reading
+- Web-based POS - PDF and ESC/POS receipt silent print
+- Web-based WMS - Serial weight scale real-time reading, delivery Note/packing List silent print
+- WebApp that need to read/write to serial ports
 
 ## Features
 
@@ -24,9 +25,9 @@ Common use cases:
 
 ### Web Serial Access
 - Bidirectional communication
-- Serial weigh scale (AWH-SA30 support in SDK)
 - Support multiple ports, mapped by key
 - Support multiple connection share same serial port
+- Serial weigh scale (AWH-SA30 supported out-of-box in JS SDK)
 
 ## How to use?
 
@@ -61,11 +62,30 @@ Configurator is provided to setup mappings between keys and printers/serials.
 
 Therefore web apps do not need to care about the actual printer names.
 
+## How to build
+
+- JDK 8 with JRE
+- Intelij IDEA (Both Community and Ultimate works)
+- NSIS (Build Windows installer only, optional)
+
+1. An artifact config file is included in git repository.
+
+2. Use Intelij IDEA to "Build artifact" to yield `out\artifacts\webapp_hardware_bridge_jar`.
+
+3. Windows: Drop JRE 8 into `./jre` directory and use NSIS to compile `install.nsi` to yield `whb.exe`
+
+   Mac/Linux: Run the artifact using JRE, installer will be studied later (PR welcome!) 
+
+4. Run Command:
+
+   Server: `java -cp webapp-hardware-bridge.jar tigerworkshop.webapphardwarebridge.Server`
+   
+   Configurator: `javaw -cp webapp-hardware-bridge.jar tigerworkshop.webapphardwarebridge.Configurator`
+
+
 ## TODOs
 - [ ] Better GUI
-- [ ] Serial JS SDK
 - [ ] Serial settings (Baudrate, data bits, stop bit, parity bit)
-- [ ] Print result feedback
 - [ ] Authentication
 
 Any other ideas? Fork and PR are welcome!

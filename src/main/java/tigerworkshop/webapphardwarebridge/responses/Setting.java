@@ -3,17 +3,32 @@ package tigerworkshop.webapphardwarebridge.responses;
 import java.util.HashMap;
 
 public class Setting {
-    int port;
-    boolean fallbackToDefaultPrinter;
-    HashMap<String, String> printers;
-    HashMap<String, String> serials;
+    String address = "127.0.0.1";
+    int port = 12212;
+    String token = "";
+    boolean fallbackToDefaultPrinter = false;
+    boolean tokenAuthenticationEnabled = false;
+    HashMap<String, String> printers = new HashMap<>();
+    HashMap<String, String> serials = new HashMap<>();
+
+    public String getAddress() {
+        return address;
+    }
 
     public int getPort() {
         return port;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     public boolean getFallbackToDefaultPrinter() {
         return fallbackToDefaultPrinter;
+    }
+
+    public boolean getTokenAuthenticationEnabled() {
+        return tokenAuthenticationEnabled;
     }
 
     public HashMap<String, String> getPrinters() {

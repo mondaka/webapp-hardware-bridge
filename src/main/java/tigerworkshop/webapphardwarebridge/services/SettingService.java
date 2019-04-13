@@ -8,6 +8,7 @@ import tigerworkshop.webapphardwarebridge.responses.Setting;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 
@@ -19,17 +20,19 @@ public class SettingService {
     private Setting setting = null;
 
     private SettingService() {
+        load();
+    }
+
+    public static SettingService getInstance() {
+        return instance;
+    }
+
+    public void load() {
         try {
-            JsonReader reader = new JsonReader(new FileReader(SETTING_FILENAME));
-            Gson gson = new Gson();
-            setting = gson.fromJson(reader, Setting.class);
-            reader.close();
+            loadCurrent();
         } catch (Exception e) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(SETTING_FALLBACK_FILENAME));
-                Gson gson = new Gson();
-                setting = gson.fromJson(reader, Setting.class);
-                reader.close();
+                loadDefault();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.exit(1);
@@ -37,12 +40,35 @@ public class SettingService {
         }
     }
 
-    public static SettingService getInstance() {
-        return instance;
+    public void loadCurrent() throws IOException {
+        loadFile(SETTING_FILENAME);
+    }
+
+    public void loadDefault() throws IOException {
+        loadFile(SETTING_FALLBACK_FILENAME);
+    }
+
+    private void loadFile(String filename) throws IOException {
+        JsonReader reader = new JsonReader(new FileReader(filename));
+        Gson gson = new Gson();
+        setting = gson.fromJson(reader, Setting.class);
+        reader.close();
+    }
+
+    public String getAddress() {
+        return setting.getAddress();
     }
 
     public int getPort() {
         return setting.getPort();
+    }
+
+    public String getToken() {
+        return setting.getToken();
+    }
+
+    public boolean getTokenAuthenticationEnabled() {
+        return setting.getTokenAuthenticationEnabled();
     }
 
     public boolean getFallbackToDefaultPrinter() {
